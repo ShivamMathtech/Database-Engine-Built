@@ -1,0 +1,12 @@
+CREATE TABLE ledger (id INTEGER PRIMARY KEY, note TEXT, amount INTEGER);
+INSERT INTO ledger VALUES (1, 'opening', 100);
+BEGIN;
+UPDATE ledger SET amount = amount + 50 WHERE id = 1;
+INSERT INTO ledger VALUES (2, 'temporary', 10);
+SELECT * FROM ledger;
+ROLLBACK;
+SELECT * FROM ledger;
+BEGIN;
+INSERT INTO ledger VALUES (3, 'committed', 25);
+COMMIT;
+SELECT * FROM ledger;
