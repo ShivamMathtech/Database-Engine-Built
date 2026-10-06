@@ -1,0 +1,45 @@
+#include "test.h"
+bool test_transaction(void) {
+    Fixture f;
+    CHECK(fixture_open(&f));
+    CHECK(sql_ok(f.db, "CREATE TABLE t (id INTEGER PRIMARY KEY, v INTEGER)"));
+    CHECK(sql_ok(f.db, "INSERT INTO t VALUES (1,10)"));
+    CHECK(sql_ok(f.db, "BEGIN"));
+    CHECK(sql_ok(f.db, "UPDATE t SET v=20 WHERE id=1"));
+    CHECK(sql_ok(f.db, "INSERT INTO t VALUES (2,30)"));
+    CHECK(sql_ok(f.db, "CREATE INDEX ix ON t(v)"));
+    CHECK(sql_ok(f.db, "CREATE TABLE transient (id INTEGER)"));
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 2));
+    CHECK(sql_ok(f.db, "ROLLBACK"));
+    CHECK(sql_rows(f.db, "SELECT * FROM t WHERE v=10", 1));
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 1));
+    CHECK(cdb_catalog_find(f.db, "transient") == NULL);
+    CHECK(!cdb_catalog_find(f.db, "t")->columns[1].index_name[0]);
+    CHECK(sql_ok(f.db, "BEGIN"));
+    CHECK(sql_ok(f.db, "DROP TABLE t"));
+    CHECK(sql_ok(f.db, "ROLLBACK"));
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 1));
+    CHECK(sql_ok(f.db, "BEGIN"));
+    CHECK(sql_ok(f.db, "INSERT INTO t VALUES (2,20)"));
+    CHECK(sql_error(f.db, "INSERT INTO t VALUES (1,99)", CDB_ERR_CONSTRAINT));
+    CHECK(!f.db->tx.active);
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 1));
+    CHECK(sql_error(f.db, "INSERT INTO t VALUES (3,30),(1,99)", CDB_ERR_CONSTRAINT));
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 1));
+    CHECK(sql_ok(f.db, "BEGIN"));
+    CHECK(sql_error(f.db, "BEGIN", CDB_ERR_TRANSACTION));
+    CHECK(f.db->tx.active);
+    CHECK(sql_error(f.db, "SELECT nothing FROM t", CDB_ERR_NOT_FOUND));
+    CHECK(f.db->tx.active);
+    CHECK(sql_ok(f.db, "INSERT INTO t VALUES (2,20)"));
+    CHECK(sql_ok(f.db, "COMMIT"));
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 2));
+    CHECK(sql_error(f.db, "COMMIT", CDB_ERR_TRANSACTION));
+    CHECK(sql_error(f.db, "ROLLBACK", CDB_ERR_TRANSACTION));
+    CHECK(sql_ok(f.db, "BEGIN"));
+    CHECK(sql_ok(f.db, "DELETE FROM t"));
+    CHECK(fixture_reopen(&f));
+    CHECK(sql_rows(f.db, "SELECT * FROM t", 2));
+    fixture_close(&f);
+    return true;
+}
