@@ -1,0 +1,13 @@
+/bin/
+/build/
+*.o
+*.d
+*.a
+*.cdb
+*.cdb.wal
+!examples/university.cdb
+*.log
+*.gcda
+*.gcno
+perf.data*
+.DS_Store
