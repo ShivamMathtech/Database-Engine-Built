@@ -1,0 +1,25 @@
++----+--------+-----+-----------+--------+
+| id | name   | age | course_id | active |
++----+--------+-----+-----------+--------+
+| 1  | Shivam | 24  | 101       | TRUE   |
+| 2  | Rahul  | 23  | 102       | TRUE   |
+| 3  | Ada    | 25  | 102       | TRUE   |
+| 4  | Grace  | 22  | 101       | TRUE   |
+| 5  | Alan   | 24  | 103       | FALSE  |
++----+--------+-----+-----------+--------+
+5 rows returned.
++-----+-----------------------+---------+
+| id  | title                 | credits |
++-----+-----------------------+---------+
+| 101 | C Systems Programming | 4       |
+| 102 | Database Internals    | 4       |
+| 103 | Numerical Methods     | 3       |
++-----+-----------------------+---------+
+3 rows returned.
++----+-----------------+------------------+
+| id | name            | department       |
++----+-----------------+------------------+
+| 1  | Professor Rao   | Computer Science |
+| 2  | Professor Mehta | Mathematics      |
++----+-----------------+------------------+
+2 rows returned.

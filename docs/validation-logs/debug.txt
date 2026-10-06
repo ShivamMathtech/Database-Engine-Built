@@ -1,0 +1,26 @@
+make: Entering directory '<project-root>'
+cc -Iinclude -D_XOPEN_SOURCE=700 -D_FILE_OFFSET_BITS=64 -Itests -std=c17 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wformat=2 -Wstrict-prototypes -Wmissing-prototypes -Werror -O0 -g3 -MMD -MP -c src/core/cdb.c -o build/debug/src/core/cdb.o
+cc -Iinclude -D_XOPEN_SOURCE=700 -D_FILE_OFFSET_BITS=64 -Itests -std=c17 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wformat=2 -Wstrict-prototypes -Wmissing-prototypes -Werror -O0 -g3 -MMD -MP -c src/storage/pager.c -o build/debug/src/storage/pager.o
+cc -Iinclude -D_XOPEN_SOURCE=700 -D_FILE_OFFSET_BITS=64 -Itests -std=c17 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wformat=2 -Wstrict-prototypes -Wmissing-prototypes -Werror -O0 -g3 -MMD -MP -c tests/integration/test_recovery.c -o build/debug/tests/integration/test_recovery.o
+cc -Iinclude -D_XOPEN_SOURCE=700 -D_FILE_OFFSET_BITS=64 -std=c17 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wformat=2 -Wstrict-prototypes -Wmissing-prototypes -Werror -O0 -g3 -DCDB_TEST_FAULTS -MMD -MP -c src/core/cdb.c -o build/debug/testlib/src/core/cdb.o
+cc -Iinclude -D_XOPEN_SOURCE=700 -D_FILE_OFFSET_BITS=64 -std=c17 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wformat=2 -Wstrict-prototypes -Wmissing-prototypes -Werror -O0 -g3 -DCDB_TEST_FAULTS -MMD -MP -c src/storage/pager.c -o build/debug/testlib/src/storage/pager.o
+ar rcs build/debug/libcdb.a build/debug/src/core/cdb.o build/debug/src/core/error.o build/debug/src/core/types.o build/debug/src/core/value.o build/debug/src/execution/executor.o build/debug/src/index/btree.o build/debug/src/index/index.o build/debug/src/lexer/lexer.o build/debug/src/parser/ast.o build/debug/src/parser/parser.o build/debug/src/repl/repl.o build/debug/src/storage/buffer_pool.o build/debug/src/storage/page.o build/debug/src/storage/pager.o build/debug/src/storage/storage.o build/debug/src/table/catalog.o build/debug/src/table/row.o build/debug/src/table/table.o build/debug/src/transaction/transaction.o build/debug/src/transaction/wal.o
+cc  build/debug/src/main.o build/debug/libcdb.a -lm -o bin/cdb-debug
+cc  build/debug/tests/unit/test_btree.o build/debug/tests/unit/test_lexer.o build/debug/tests/unit/test_parser.o build/debug/tests/unit/test_storage.o build/debug/tests/unit/test_table.o build/debug/tests/unit/test_transaction.o build/debug/tests/unit/test_values.o build/debug/tests/integration/test_persistence.o build/debug/tests/integration/test_queries.o build/debug/tests/integration/test_recovery.o build/debug/tests/test_main.o build/debug/tests/test_support.o build/debug/testlib/src/core/cdb.o build/debug/testlib/src/core/error.o build/debug/testlib/src/core/types.o build/debug/testlib/src/core/value.o build/debug/testlib/src/execution/executor.o build/debug/testlib/src/index/btree.o build/debug/testlib/src/index/index.o build/debug/testlib/src/lexer/lexer.o build/debug/testlib/src/parser/ast.o build/debug/testlib/src/parser/parser.o build/debug/testlib/src/repl/repl.o build/debug/testlib/src/storage/buffer_pool.o build/debug/testlib/src/storage/page.o build/debug/testlib/src/storage/pager.o build/debug/testlib/src/storage/storage.o build/debug/testlib/src/table/catalog.o build/debug/testlib/src/table/row.o build/debug/testlib/src/table/table.o build/debug/testlib/src/transaction/transaction.o build/debug/testlib/src/transaction/wal.o -lm -o bin/test-cdb-debug
+cp bin/cdb-debug bin/cdb
+./bin/test-cdb-debug
+[1/11] values / row codec ... PASS
+[2/11] lexer ... PASS
+[3/11] parser / malformed SQL ... PASS
+[4/11] pages / pager / buffer pool ... PASS
+[5/11] B-Tree split / merge / deletion ... PASS
+[6/11] tables / constraints / catalog ... PASS
+[7/11] transactions / rollback ... PASS
+[8/11] queries / planner / index maintenance ... PASS
+[9/11] persistence / relocation ... PASS
+[10/11] crash recovery ... PASS
+[11/11] corrupt files / WAL ... PASS
+11 test groups passed; 0 skipped.
+sh scripts/cli-test.sh ./bin/cdb
+CLI multiline, quoted semicolons, metadata, restart and exit-rollback: PASS
+make: Leaving directory '<project-root>'

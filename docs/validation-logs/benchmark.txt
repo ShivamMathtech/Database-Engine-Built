@@ -1,0 +1,10 @@
+CDB v0.1.0 benchmark | rows=100000 | CLOCK_MONOTONIC
+INSERT (batches of 5000)            0.193446 s | 516939 rows/s
+FULL TABLE SCAN (30 queries)        0.520324 s | 17.344 ms/query
+CREATE INDEX                       0.031895 s
+INDEX LOOKUP (3000 queries)         0.008464 s | 2.821 us/query
+Measured mean scan/index ratio     6147.13x
+UPDATE 1000 primary-key matches    0.008685 s (one durable transaction)
+DELETE 1000 primary-key matches    0.003577 s (one durable transaction)
+Measurements include parsing/result allocation; scan and index queries are identical.
+Scan timing precedes index creation. Results describe this run, not a portable guarantee.

@@ -1,0 +1,10 @@
+Original detect_leaks=1 attempt: tests reached their final group, but the runtime leak scanner failed. This is NOT a successful leak check.
+
+[11/11] corrupt files / WAL ... ==254==Can't open /proc/244/task for reading.
+==244==LeakSanitizer has encountered a fatal error.
+==244==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==244==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+==255==Can't open /proc/247/task for reading.
+==247==LeakSanitizer has encountered a fatal error.
+==247==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==247==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
